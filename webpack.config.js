@@ -1,18 +1,29 @@
+const path = require('path');
+
 module.exports = {
+    mode: 'development',
     entry: './src/index.tsx',
     output: {
-        filename: './dist/bundle.js', //this is the default name, so you can skip it
-        //at this directory our bundle file will be available
-        //make sure port 8090 is used when launching webpack-dev-server
-        publicPath: 'http://localhost:8090/assets'
+        path: __dirname + "/dist",
+        filename: './bundle.js',
+    },
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: 9000
     },
     module: {
-        loaders: [{
-            //tell webpack to use jsx-loader for all *.jsx files
-            test: /\.jsx$/,
-            loader: 'jsx-loader?insertPragma=React.DOM&harmony'
-        },
-            { test: /\.tsx?$/, loader: "ts-loader" }]
+        rules: [
+            // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+
+            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+
+
+            { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+
+        ]
     },
     externals: {
         //don't bundle the 'react' npm package with our bundle.js
@@ -21,6 +32,8 @@ module.exports = {
         "react-dom": "ReactDOM"
     },
     resolve: {
-        extensions: ['', '.js', '.jsx', ".ts", ".tsx"]
-    }
+        // Add '.ts' and '.tsx' as resolvable extensions.
+        extensions: [".ts", ".tsx", ".js", ".json"]
+    },
+    devtool: "source-map",
 };
