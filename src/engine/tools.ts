@@ -9,8 +9,5 @@ export function reduceNumber(n: number): number {
         n = Math.floor(n / 10);
     }
 
-    console.log(result);
-
-
     return reduceNumber(result);
 }

@@ -28,7 +28,7 @@ class MatrixDisplay extends React.Component<MatrixDisplayProps, {}> {
         }
 
         let printMainNumbers = (number: number) => {
-            return printNumbers(mainNumbers, number, "X");
+            return printNumbers(mainNumbers, number, "╳");
         }
 
 

@@ -4,7 +4,7 @@ import MatrixDisplay from './matrixDisplay'
 import { DestinyCross } from './destinyCross'
 import DateExpander from './dateExpander'
 import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from 'react-datepicker'
+import DatePicker, { registerLocale } from 'react-datepicker'
 
 interface AppState {
     date: Date,
@@ -18,8 +18,10 @@ export class App extends React.Component<{}, AppState> {
         this.state = { date: moment().toDate(), name: "" }
     }
 
-    dateChanged = (date: Date) => {
-        this.setState({ date: date });
+    dateChanged = (date: Date | null) => {
+        if (date != null) {
+            this.setState({ date: date });
+        }
     }
 
     nameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,8 +31,8 @@ export class App extends React.Component<{}, AppState> {
 
     render() {
         return (<div><h1>Numerology</h1>
-            Jméno: <input onChange={this.nameChanged} />
-            Datum narození <DatePicker onChange={this.dateChanged} selected={this.state.date} />
+            <span>Jméno: <input onChange={this.nameChanged} /></span>
+            <span>Datum narození <DatePicker onChange={this.dateChanged} selected={this.state.date} showMonthDropdown showYearDropdown minDate={moment().subtract(100, "years").toDate()} maxDate={moment().toDate()} /></span>
             <DestinyCross name={this.state.name} />
             <DateExpander date={this.state.date} />
             <MatrixDisplay date={this.state.date} />

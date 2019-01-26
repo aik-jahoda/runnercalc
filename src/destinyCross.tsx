@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as moment from 'moment';
 import { NameNumerology } from './engine/numerologyName'
 import { string, object, number } from 'prop-types';
-import { getMessage } from './engine/numberExplanation';
+import { getMessage, MessageType } from './engine/numberExplanation';
 import { getNumberFromText } from './engine/alphabet';
 
 interface DestinyCrossProps {
@@ -15,7 +15,15 @@ interface DestinyCrossState {
 }
 
 function createMessage(n: number) {
-        return <div>{n}: {getMessage(n)}</div>
+        const message = getMessage(n);
+        const messageTypeToColor = (type: MessageType) => {
+                switch (type) {
+                        case MessageType.neutral: return undefined;
+                        case MessageType.positive: return "green";
+                        case MessageType.negative: return "red";
+                }
+        }
+        return <p style={{ color: messageTypeToColor(message.type) }}>{message.id}: {message.text}</p>
 }
 
 function numberInCircle(n: number) {
@@ -52,7 +60,7 @@ export class DestinyCross extends React.Component<DestinyCrossProps, DestinyCros
                                 result.east,
                                 result.west,
                                 result.south
-                        ].filter((x) => x !== 0).sort()));
+                        ].filter((x) => x !== 0))).sort((a, b) => a - b);
                 return (<div>
                         <table style={{ textAlign: "center" }}>
                                 <tr>
