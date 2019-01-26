@@ -24,3 +24,12 @@
 .dateExpander .main{
   font-size: 1.5em;
 }
+
+.circle{
+   border-radius:50%;
+   text-align:center;
+   border: 1px solid black;
+   width: 1.5em;
+   height: 1.5em;
+   display: inline-block;
+}

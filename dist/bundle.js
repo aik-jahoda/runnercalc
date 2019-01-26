@@ -32609,54 +32609,38 @@ module.exports = function(module) {
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "react");
-var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-var matrixDisplay_1 = __webpack_require__(/*! ./matrixDisplay */ "./src/matrixDisplay.tsx");
-var destinyCross_1 = __webpack_require__(/*! ./destinyCross */ "./src/destinyCross.tsx");
-var dateExpander_1 = __webpack_require__(/*! ./dateExpander */ "./src/dateExpander.tsx");
+const React = __webpack_require__(/*! react */ "react");
+const moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+const matrixDisplay_1 = __webpack_require__(/*! ./matrixDisplay */ "./src/matrixDisplay.tsx");
+const destinyCross_1 = __webpack_require__(/*! ./destinyCross */ "./src/destinyCross.tsx");
+const dateExpander_1 = __webpack_require__(/*! ./dateExpander */ "./src/dateExpander.tsx");
 __webpack_require__(/*! react-datepicker/dist/react-datepicker.css */ "./node_modules/react-datepicker/dist/react-datepicker.css");
-var react_datepicker_1 = __webpack_require__(/*! react-datepicker */ "./node_modules/react-datepicker/es/index.js");
-var App = /** @class */ (function (_super) {
-    __extends(App, _super);
-    function App(props) {
-        var _this = _super.call(this, props) || this;
-        _this.dateChanged = function (date) {
-            _this.setState({ date: date });
+const react_datepicker_1 = __webpack_require__(/*! react-datepicker */ "./node_modules/react-datepicker/es/index.js");
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.dateChanged = (date) => {
+            this.setState({ date: date });
         };
-        _this.nameChanged = function (event) {
+        this.nameChanged = (event) => {
             event.preventDefault();
-            _this.setState({ name: event.target.value });
+            this.setState({ name: event.target.value });
         };
-        _this.state = { date: moment().toDate(), name: "" };
-        return _this;
+        this.state = { date: moment().toDate(), name: "" };
     }
-    App.prototype.render = function () {
+    render() {
         return (React.createElement("div", null,
             React.createElement("h1", null, "Numerology"),
-            "Datum narozen\u00ED ",
-            React.createElement(react_datepicker_1.default, { onChange: this.dateChanged, selected: this.state.date }),
             "Jm\u00E9no: ",
             React.createElement("input", { onChange: this.nameChanged }),
+            "Datum narozen\u00ED ",
+            React.createElement(react_datepicker_1.default, { onChange: this.dateChanged, selected: this.state.date }),
+            React.createElement(destinyCross_1.DestinyCross, { name: this.state.name }),
             React.createElement(dateExpander_1.default, { date: this.state.date }),
-            React.createElement(matrixDisplay_1.default, { date: this.state.date }),
-            React.createElement(destinyCross_1.DestinyCross, { name: this.state.name })));
-    };
-    return App;
-}(React.Component));
+            React.createElement(matrixDisplay_1.default, { date: this.state.date })));
+    }
+}
 exports.App = App;
 
 
@@ -32671,33 +32655,17 @@ exports.App = App;
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "react");
-var numerology_1 = __webpack_require__(/*! ./numerology */ "./src/numerology.ts");
-var Display = /** @class */ (function (_super) {
-    __extends(Display, _super);
-    function Display() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Display.prototype.render = function () {
-        var result = numerology_1.default.analyse(this.props.date);
-        var countedRows = [];
-        var maxCounted = Math.max(result.dayCounted.length, result.yearCounted.length);
-        var sumCounted = numerology_1.default.reduceNumber(result.sum);
-        for (var i = maxCounted - 1; i >= 0; i--) {
+const React = __webpack_require__(/*! react */ "react");
+const numerology_1 = __webpack_require__(/*! ./engine/numerology */ "./src/engine/numerology.ts");
+const tools_1 = __webpack_require__(/*! ./engine/tools */ "./src/engine/tools.ts");
+class Display extends React.Component {
+    render() {
+        let result = numerology_1.default.analyse(this.props.date);
+        let countedRows = [];
+        let maxCounted = Math.max(result.dayCounted.length, result.yearCounted.length);
+        let sumCounted = tools_1.reduceNumber(result.sum);
+        for (let i = maxCounted - 1; i >= 0; i--) {
             countedRows.push(React.createElement("tr", null,
                 React.createElement("td", null, result.dayCounted[i]),
                 React.createElement("td", null),
@@ -32726,9 +32694,8 @@ var Display = /** @class */ (function (_super) {
                             result.sum,
                             " / ",
                             result.isKingNumber() ? "king" : result.sumCounted.join("->")))))));
-    };
-    return Display;
-}(React.Component));
+    }
+}
 exports.default = Display;
 
 
@@ -32743,24 +32710,80 @@ exports.default = Display;
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "react");
-var prop_types_1 = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-var diacritics = __webpack_require__(/*! diacritics */ "./node_modules/diacritics/index.js");
-var alphabetMatrix = {
+const React = __webpack_require__(/*! react */ "react");
+const numerologyName_1 = __webpack_require__(/*! ./engine/numerologyName */ "./src/engine/numerologyName.ts");
+const numberExplanation_1 = __webpack_require__(/*! ./engine/numberExplanation */ "./src/engine/numberExplanation.ts");
+function createMessage(n) {
+    return React.createElement("div", null,
+        n,
+        ": ",
+        numberExplanation_1.getMessage(n));
+}
+function numberInCircle(n) {
+    return React.createElement("span", { className: "circle" }, n);
+}
+function nameElemet(name) {
+    return React.createElement("table", null,
+        React.createElement("tr", null,
+            React.createElement("td", { style: { textAlign: "center" } }, name.initialLetterNumber)),
+        React.createElement("tr", null,
+            React.createElement("td", null, name.name)));
+}
+class DestinyCross extends React.Component {
+    render() {
+        const result = numerologyName_1.NameNumerology.analyse(this.props.name);
+        const sentences = Array.from(new Set([
+            result.firstCoordinate,
+            result.secondCoordinate,
+            result.thirdCoordinate,
+            result.destinyNumber,
+            result.east,
+            result.west,
+            result.south
+        ].filter((x) => x !== 0).sort()));
+        return (React.createElement("div", null,
+            React.createElement("table", { style: { textAlign: "center" } },
+                React.createElement("tr", null,
+                    React.createElement("td", null,
+                        React.createElement("div", null, numberInCircle(result.destinyNumber)))),
+                React.createElement("tr", null,
+                    React.createElement("td", null,
+                        React.createElement("table", null,
+                            React.createElement("tr", null,
+                                React.createElement("td", { rowSpan: 2 }, numberInCircle(result.west)),
+                                React.createElement("td", { style: {
+                                        display: "flex",
+                                        borderBottom: "1px solid black"
+                                    } }, result.nameNumbers.map((x) => nameElemet(x))),
+                                React.createElement("td", { rowSpan: 2 }, numberInCircle(result.east)))))),
+                React.createElement("tr", null,
+                    React.createElement("td", null,
+                        React.createElement("div", null, result.firstCoordinate),
+                        React.createElement("div", null, result.secondCoordinate),
+                        React.createElement("div", null, result.thirdCoordinate),
+                        React.createElement("div", null, numberInCircle(result.south))))),
+            React.createElement("div", null, sentences.map(createMessage))));
+    }
+}
+exports.DestinyCross = DestinyCross;
+
+
+/***/ }),
+
+/***/ "./src/engine/alphabet.ts":
+/*!********************************!*\
+  !*** ./src/engine/alphabet.ts ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const diacritics = __webpack_require__(/*! diacritics */ "./node_modules/diacritics/index.js");
+const tools_1 = __webpack_require__(/*! ./tools */ "./src/engine/tools.ts");
+const alphabetMatrix = {
     A: 1, J: 1, S: 1,
     B: 2, K: 2, T: 2,
     C: 3, L: 3, U: 3,
@@ -32771,8 +32794,37 @@ var alphabetMatrix = {
     H: 8, Q: 8, Z: 8,
     I: 9, Ü: 9, R: 9
 };
-var messages = [
-    { id: 1, text: "Charakterizuje osobnost člověka, jeho ´já´, projevuje se touha vést a být první. Pokud se toto číslo objeví v pozici některé světové strany, člověk má šanci zde vyniknout jako osobnost. Bude prakticky nepřehlédnutelný." },
+function getNumberFromAlphabet(ch) {
+    return alphabetMatrix[ch] || alphabetMatrix[diacritics.remove(ch)] || 0;
+}
+function getNumberFromText(name) {
+    name = name.toUpperCase();
+    let rawNumber = 0;
+    for (let ch of name) {
+        rawNumber += getNumberFromAlphabet(ch);
+    }
+    const initialLetterNumber = name.length > 0 ? getNumberFromAlphabet(name[0]) : 0;
+    return {
+        reducedNumber: tools_1.reduceNumber(rawNumber), rawNumber, initialLetterNumber
+    };
+}
+exports.getNumberFromText = getNumberFromText;
+
+
+/***/ }),
+
+/***/ "./src/engine/numberExplanation.ts":
+/*!*****************************************!*\
+  !*** ./src/engine/numberExplanation.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+let messages = [
+    { id: 1, text: "Charakterizuje osobnost člověka, jeho 'já', projevuje se touha vést a být první. Pokud se toto číslo objeví v pozici některé světové strany, člověk má šanci zde vyniknout jako osobnost. Bude prakticky nepřehlédnutelný." },
     { id: 2, text: "Vztahy k druhým lidem, dualita, snášenlivost, diplomacie. Soudržnost s přáteli. Nejsou problémy s komunikací, s navazováním nových kontaktů." },
     { id: 3, text: "Umělecké ambice, ale také možná přelétavost ve všem. Vnímáme, že se kolem nás pořád něco děje. Nenudíme se. Rychle může přicházet štěstí, ale na druhou stranu si člověk neštěstí může člověk přivodit svou nestálostí." },
     { id: 4, text: "Fyzická stránka života, materiálno a konservatismus. Člověk s tímto číslem je oběma nohama na zemi. Pokud má toto číslo člověk v pozici některé světové strany, bude tam pravděpodobně hodně podsaditý, ale také klidný. Bude si schraňovat svůj majetek. Určitě bude víc dbát na peníze než na umění." },
@@ -32873,11 +32925,181 @@ var messages = [
     { id: 99, text: "Nestačí snít s otevřenýma očima, je třeba sny také realizovat." },
     { id: 100, text: "Stovka představuje absolutní Boží ochranu, možnost průniku do jiných dimenzí a práce v nich. Obrovské ambice, které ochraňují i při tzv. karmickém trojúhelníku či kvadrátu." }
 ];
+function getMessage(n) {
+    if (!n) {
+        return "";
+    }
+    return n >= 1 && n <= 100 ? messages[n - 1].text : "";
+}
+exports.getMessage = getMessage;
+
+
+/***/ }),
+
+/***/ "./src/engine/numerology.ts":
+/*!**********************************!*\
+  !*** ./src/engine/numerology.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class numerology {
+    getDigits(number) {
+        var result = [];
+        while (number > 0) {
+            var digit = number % 10;
+            result.unshift(digit);
+            number = Math.floor(number / 10);
+        }
+        return result;
+    }
+    sumMainNumbers(mainNumbers) {
+        return mainNumbers.reduce((prev, current, index) => prev + index * current, 0);
+    }
+    getMainNumbers(date) {
+        let mainNumbers = [];
+        for (let digit of this.getDigits(date.getDate())) {
+            mainNumbers[digit] = mainNumbers[digit] || 0;
+            mainNumbers[digit]++;
+        }
+        // zero based months
+        for (let digit of this.getDigits(date.getMonth() + 1)) {
+            mainNumbers[digit] = mainNumbers[digit] || 0;
+            mainNumbers[digit]++;
+        }
+        for (let digit of this.getDigits(date.getFullYear())) {
+            mainNumbers[digit] = mainNumbers[digit] || 0;
+            mainNumbers[digit]++;
+        }
+        return mainNumbers;
+    }
+    reduceNumber(number) {
+        let numberCounted = [];
+        while (number >= 10) {
+            let counted = this.getDigits(number).reduce((prev, current) => prev + current);
+            numberCounted.push(counted);
+            number = counted;
+        }
+        return numberCounted;
+    }
+    analyse(date) {
+        let month = date.getMonth() + 1;
+        let dayCounted = this.reduceNumber(date.getDate());
+        let yearCounted = this.reduceNumber(date.getFullYear());
+        let mainNumbers = this.getMainNumbers(date);
+        let sum = this.sumMainNumbers(mainNumbers);
+        let sumCounted = this.reduceNumber(sum);
+        let that = this;
+        return {
+            day: date.getDate(),
+            month: month,
+            year: date.getFullYear(),
+            dayCounted: dayCounted,
+            yearCounted: yearCounted,
+            sum: sum,
+            sumCounted,
+            mainNumbers: mainNumbers,
+            countedNumbers() {
+                let result = [];
+                for (let number of dayCounted) {
+                    for (let digit of that.getDigits(number)) {
+                        result[digit] = result[digit] || 0;
+                        result[digit]++;
+                    }
+                }
+                for (let number of yearCounted) {
+                    for (let digit of that.getDigits(number)) {
+                        result[digit] = result[digit] || 0;
+                        result[digit]++;
+                    }
+                }
+                for (let digit of that.getDigits(sum)) {
+                    result[digit] = result[digit] || 0;
+                    result[digit]++;
+                }
+                for (let number of sumCounted) {
+                    for (let digit of that.getDigits(number)) {
+                        result[digit] = result[digit] || 0;
+                        result[digit]++;
+                    }
+                }
+                return result;
+            },
+            isKingNumber() {
+                let digits = that.getDigits(sum);
+                return digits.length === 2 && digits[0] == digits[1];
+            }
+        };
+    }
+}
+exports.default = new numerology();
+
+
+/***/ }),
+
+/***/ "./src/engine/numerologyName.ts":
+/*!**************************************!*\
+  !*** ./src/engine/numerologyName.ts ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const alphabet_1 = __webpack_require__(/*! ./alphabet */ "./src/engine/alphabet.ts");
+const tools_1 = __webpack_require__(/*! ./tools */ "./src/engine/tools.ts");
+function getNames(name) {
+    return name.split(" ").filter((name) => name.length > 0);
+}
+class NameNumerology {
+    static analyse(name) {
+        const names = getNames(name);
+        const nameNumbers = names.map((name) => (Object.assign({}, alphabet_1.getNumberFromText(name), { name })));
+        const destinyNumber = nameNumbers.map(number => number.initialLetterNumber)
+            .reduce((previous, current) => previous + current, 0);
+        const firstCoordinate = nameNumbers.map(number => number.rawNumber)
+            .reduce((previous, current) => previous + current, 0);
+        const secondCoordinate = destinyNumber + firstCoordinate;
+        const thirdCoordinate = firstCoordinate + names.length * destinyNumber;
+        const west = nameNumbers.length > 0 ? nameNumbers[0].reducedNumber : 0;
+        const east = nameNumbers.length > 1 ? nameNumbers[nameNumbers.length - 1].reducedNumber : 0;
+        const south = tools_1.reduceNumber(thirdCoordinate);
+        return {
+            nameNumbers,
+            destinyNumber,
+            firstCoordinate,
+            secondCoordinate,
+            thirdCoordinate,
+            west,
+            east,
+            south
+        };
+    }
+}
+exports.NameNumerology = NameNumerology;
+
+
+/***/ }),
+
+/***/ "./src/engine/tools.ts":
+/*!*****************************!*\
+  !*** ./src/engine/tools.ts ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 function reduceNumber(n) {
     if (n < 10) {
         return n;
     }
-    var result = 0;
+    let result = 0;
     while (n > 0) {
         result += n % 10;
         n = Math.floor(n / 10);
@@ -32885,159 +33107,7 @@ function reduceNumber(n) {
     console.log(result);
     return reduceNumber(result);
 }
-function getNumberFromAlphabetChar(ch) {
-    return alphabetMatrix[ch] || alphabetMatrix[diacritics.remove(ch)] || 0;
-}
-function getNumberFromAlphabet(name) {
-    name = name.toUpperCase();
-    var rawNumber = 0;
-    for (var _i = 0, name_1 = name; _i < name_1.length; _i++) {
-        var ch = name_1[_i];
-        rawNumber += getNumberFromAlphabetChar(ch);
-    }
-    var initialLetterNumber = name.length > 0 ? getNumberFromAlphabetChar(name[0]) : 0;
-    console.log("reduce", rawNumber);
-    return {
-        reducedNumber: reduceNumber(rawNumber), rawNumber: rawNumber, initialLetterNumber: initialLetterNumber
-    };
-}
-function getMessage(n) {
-    if (!prop_types_1.number) {
-        return "";
-    }
-    return n > 1 && n <= 100 ? messages[n - 1].text : "";
-}
-function createMessage(n) {
-    return React.createElement("span", null,
-        n,
-        ": ",
-        getMessage(n));
-}
-var DestinyCross = /** @class */ (function (_super) {
-    __extends(DestinyCross, _super);
-    function DestinyCross() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    DestinyCross.prototype.getNames = function (name) {
-        return name.split(" ").filter(function (name) { return name.length > 0; });
-    };
-    DestinyCross.prototype.render = function () {
-        var names = this.getNames(this.props.name);
-        var nameNumbers = names.map(function (name) { return getNumberFromAlphabet(name); });
-        var destinyNumber = nameNumbers.map(function (number) { return number.initialLetterNumber; })
-            .reduce(function (previous, current) { return previous + current; }, 0);
-        var firstCoordinate = nameNumbers.map(function (number) { return number.rawNumber; })
-            .reduce(function (previous, current) { return previous + current; }, 0);
-        var secondCoordinate = destinyNumber + firstCoordinate;
-        var thirdCoordinate = firstCoordinate + names.length * destinyNumber;
-        return (React.createElement("div", null,
-            React.createElement("div", null,
-                " ",
-                names.toString(),
-                " "),
-            React.createElement("div", null,
-                " ",
-                nameNumbers.map(function (x) { return JSON.stringify(x); }).toString(),
-                " "),
-            React.createElement("div", null, destinyNumber),
-            React.createElement("div", null, createMessage(firstCoordinate)),
-            React.createElement("div", null, createMessage(secondCoordinate)),
-            React.createElement("div", null, createMessage(thirdCoordinate)),
-            React.createElement("div", null),
-            React.createElement("svg", { width: "640", height: "480" },
-                React.createElement("g", { "layout-css": "height: 30; justifyContent: center; flexDirection: row" },
-                    React.createElement("text", { textAnchor: "middle", fontFamily: "serif", fontSize: "24", id: "svg_3", strokeWidth: "0", stroke: "#000000", fill: "#000000" }, "michaela")),
-                "         ",
-                React.createElement("g", { "layout-css": "height: 30; justifyContent: center; flexDirection: row" },
-                    "             ",
-                    React.createElement("text", { textAnchor: "middle", fontFamily: "serif", fontSize: "24", id: "svg_4", strokeWidth: "0", stroke: "#000000", fill: "#000000" }, "jahodova")),
-                "         ",
-                React.createElement("line", { id: "svg_1", y2: "148", x2: "428", y1: "150", x1: "180", strokeWidth: "1", stroke: "#000000", fill: "none" }),
-                React.createElement("line", { id: "svg_2", y2: "198", x2: "305", y1: "166", x1: "305", strokeWidth: "1", stroke: "#000000", fill: "none" }),
-                "     "),
-            "     ",
-            React.createElement("svg", { id: "chart", style: ({ height: "100%", width: "100%", margin: "10px" }) },
-                "         ",
-                React.createElement("g", { "layout-css": "height: 30; justifyContent: center; flexDirection: row", "layout-width": "460", "layout-height": "30", transform: "translate(0, 0)" },
-                    React.createElement("text", { "layout-css": "width: 0;", "text-anchor": "middle", dy: "1em", "font-size": "20", "layout-width": "0", "layout-height": "30", transform: "translate(230, 0)" }, "Awesome Chart Layout Example!")),
-                "         ",
-                React.createElement("g", { "layout-css": "flex: 1; flexDirection: row; marginLeft: 20", "layout-width": "440", "layout-height": "170", transform: "translate(20, 30)" },
-                    "             ",
-                    React.createElement("g", { "layout-css": "flex: 1;", className: "plotArea", "layout-width": "360", "layout-height": "170", transform: "translate(0, 0)" },
-                        React.createElement("rect", { fill: "#1f77b4" }),
-                        React.createElement("g", { className: "line-series" },
-                            React.createElement("path", { d: "M5.145920190589637,146L10.291840381179274,155L15.43776057176891,145L20.583680762358547,73L25.729600952948186,123L41.167361524717094,139L46.31328171530673,140L51.45920190589637,153L56.605122096486,77L61.75104228707564,98L77.18880285884455,120L82.33472304943419,85L87.48064324002382,75L92.62656343061346,65L97.77248362120311,50L113.210244192972,88L118.35616438356163,95L123.50208457415128,110L128.6480047647409,79L133.79392495533057,43L149.23168552709947,49L154.3776057176891,75L159.52352590827874,104L164.66944609886838,94L169.815366289458,81L185.25312686122692,127L190.39904705181655,124L195.54496724240622,116L200.69088743299582,63L205.83680762358549,119L221.2745681953544,138L226.420488385944,114L231.56640857653366,79L236.71232876712327,105L241.85824895771293,115L257.2960095294818,149L262.44192972007147,113L267.58784991066113,124L272.73377010125074,103L277.8796902918404,76L293.3174508636093,90L298.46337105419894,78L303.60929124478855,71L308.7552114353782,125L313.9011316259678,141L329.33889219773675,130L334.4848123883264,113L339.630732578916,123L344.7766527695057,85L349.9225729600953,84" }))),
-                    "             ",
-                    React.createElement("g", { "layout-css": "width: 50;", className: "axis right", "layout-width": "50", "layout-height": "170", transform: "translate(360, 0)" },
-                        React.createElement("rect", { fill: "#ff7f0e" }),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(0,146)" },
-                            React.createElement("line", { x2: "6", y2: "0" }),
-                            React.createElement("text", { dy: ".32em", style: { textAnchor: "start" }, x: "9", y: "0" }, "100.0")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(0,115)" },
-                            React.createElement("line", { x2: "6", y2: "0" }),
-                            React.createElement("text", { dy: ".32em", style: { textAnchor: "start" }, x: "9", y: "0" }, "100.5")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(0,85)" },
-                            React.createElement("line", { x2: "6", y2: "0" }),
-                            React.createElement("text", { dy: ".32em", style: { textAnchor: "start" }, x: "9", y: "0" }, "101.0")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(0,55)" },
-                            React.createElement("line", { x2: "6", y2: "0" }),
-                            React.createElement("text", { dy: ".32em", style: { textAnchor: "start" }, x: "9", y: "0" }, "101.5")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(0,24)" },
-                            React.createElement("line", { x2: "6", y2: "0" }),
-                            React.createElement("text", { dy: ".32em", style: { textAnchor: "start" }, x: "9", y: "0" }, "102.0")),
-                        React.createElement("path", { className: "domain", d: "M6,0H0V170H6" })),
-                    "             ",
-                    React.createElement("g", { "layout-css": "width: 30; justifyContent: center;", "layout-width": "30", "layout-height": "170", transform: "translate(410, 0)" },
-                        "                 ",
-                        React.createElement("g", { "layout-css": "height: 0;", "layout-width": "30", "layout-height": "0", transform: "translate(0, 85)" },
-                            React.createElement("text", { transform: "rotate(90)" }, "Price")))),
-                "         ",
-                React.createElement("g", { "layout-css": "height: 30; flexDirection: row", "layout-width": "460", "layout-height": "30", transform: "translate(0, 200)" },
-                    "             ",
-                    React.createElement("g", { "layout-css": "flex: 1; marginRight: 80; marginLeft: 20", className: "axis bottom", "layout-width": "360", "layout-height": "30", transform: "translate(20, 0)" },
-                        React.createElement("rect", { fill: "#2ca02c" }),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(0,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Feb 02")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(36.02144133412746,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Feb 09")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(72.04288266825492,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Feb 16")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(108.06432400238238,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Feb 23")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(144.08576533650984,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Mar 02")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(180.10720667063725,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Mar 09")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(216.12864800476476,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Mar 16")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(252.1500893388922,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Mar 23")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(288.1715306730197,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Mar 30")),
-                        "                 ",
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(323.9785586658725,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Apr 06")),
-                        React.createElement("g", { className: "tick", style: { opacity: 1 }, transform: "translate(360,0)" },
-                            React.createElement("line", { y2: "6", x2: "0" }),
-                            React.createElement("text", { dy: ".71em", style: { textAnchor: "middle" }, y: "9", x: "0" }, "Apr 13")),
-                        React.createElement("path", { className: "domain", d: "M0,6V0H360V6" }))),
-                "         ",
-                React.createElement("g", { "layout-css": "height: 30; justifyContent: center; flexDirection: row", "layout-width": "460", "layout-height": "30", transform: "translate(0, 230)" },
-                    React.createElement("text", { "layout-css": "width: 0; marginRight: 80", "text-anchor": "middle", dy: "1em", "layout-width": "0", "layout-height": "30", transform: "translate(190, 0)" }, "Date")))));
-    };
-    return DestinyCross;
-}(React.Component));
-exports.DestinyCross = DestinyCross;
+exports.reduceNumber = reduceNumber;
 
 
 /***/ }),
@@ -33052,9 +33122,9 @@ exports.DestinyCross = DestinyCross;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "react");
-var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
-var app_1 = __webpack_require__(/*! ./app */ "./src/app.tsx");
+const React = __webpack_require__(/*! react */ "react");
+const ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
+const app_1 = __webpack_require__(/*! ./app */ "./src/app.tsx");
 ReactDOM.render(React.createElement(app_1.App, null), document.getElementById('content'));
 
 
@@ -33069,37 +33139,19 @@ ReactDOM.render(React.createElement(app_1.App, null), document.getElementById('c
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = __webpack_require__(/*! react */ "react");
-var numerology_1 = __webpack_require__(/*! ./numerology */ "./src/numerology.ts");
-var MatrixDisplay = /** @class */ (function (_super) {
-    __extends(MatrixDisplay, _super);
-    function MatrixDisplay() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    MatrixDisplay.prototype.render = function () {
-        var result = numerology_1.default.analyse(this.props.date);
-        var mainNumbers = result.mainNumbers || [];
-        var computedNumbers = result.countedNumbers ? result.countedNumbers() : [];
-        var printNumbers = function (array, number, placeholder) {
-            if (placeholder === void 0) { placeholder = ""; }
-            var count = array ? array[number] : undefined;
-            var result = "";
+const React = __webpack_require__(/*! react */ "react");
+const numerology_1 = __webpack_require__(/*! ./engine/numerology */ "./src/engine/numerology.ts");
+class MatrixDisplay extends React.Component {
+    render() {
+        let result = numerology_1.default.analyse(this.props.date);
+        let mainNumbers = result.mainNumbers || [];
+        let computedNumbers = result.countedNumbers ? result.countedNumbers() : [];
+        let printNumbers = (array, number, placeholder = "") => {
+            let count = array ? array[number] : undefined;
+            let result = "";
             if (count) {
-                for (var i = 0; i < count; i++)
+                for (let i = 0; i < count; i++)
                     result += number + " ";
             }
             else if (!mainNumbers[number]) {
@@ -33107,10 +33159,10 @@ var MatrixDisplay = /** @class */ (function (_super) {
             }
             return result;
         };
-        var printMainNumbers = function (number) {
+        let printMainNumbers = (number) => {
             return printNumbers(mainNumbers, number, "X");
         };
-        var printComputedNumbers = function (number) {
+        let printComputedNumbers = (number) => {
             return printNumbers(computedNumbers, number);
         };
         return (React.createElement("table", { className: "matrix" },
@@ -33145,131 +33197,9 @@ var MatrixDisplay = /** @class */ (function (_super) {
                     React.createElement("td", null,
                         React.createElement("div", { className: "main" }, printMainNumbers(7)),
                         React.createElement("div", { className: "computed" }, printComputedNumbers(7)))))));
-    };
-    return MatrixDisplay;
-}(React.Component));
-exports.default = MatrixDisplay;
-
-
-/***/ }),
-
-/***/ "./src/numerology.ts":
-/*!***************************!*\
-  !*** ./src/numerology.ts ***!
-  \***************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var numerology = /** @class */ (function () {
-    function numerology() {
     }
-    numerology.prototype.getDigits = function (number) {
-        var result = [];
-        while (number > 0) {
-            var digit = number % 10;
-            result.unshift(digit);
-            number = Math.floor(number / 10);
-        }
-        return result;
-    };
-    numerology.prototype.reduceNumber = function (number) {
-        var numberCounted = [];
-        while (number >= 10) {
-            var counted = this.getDigits(number).reduce(function (prev, current) { return prev + current; });
-            numberCounted.push(counted);
-            number = counted;
-        }
-        return numberCounted;
-    };
-    numerology.prototype.sumMainNumbers = function (mainNumbers) {
-        return mainNumbers.reduce(function (prev, current, index) {
-            return prev + index * current;
-        }, 0);
-    };
-    numerology.prototype.getMainNumbers = function (date) {
-        var mainNumbers = [];
-        for (var _i = 0, _a = this.getDigits(date.getDate()); _i < _a.length; _i++) {
-            var digit = _a[_i];
-            mainNumbers[digit] = mainNumbers[digit] || 0;
-            mainNumbers[digit]++;
-        }
-        // zero based months
-        for (var _b = 0, _c = this.getDigits(date.getMonth() + 1); _b < _c.length; _b++) {
-            var digit = _c[_b];
-            mainNumbers[digit] = mainNumbers[digit] || 0;
-            mainNumbers[digit]++;
-        }
-        for (var _d = 0, _e = this.getDigits(date.getFullYear()); _d < _e.length; _d++) {
-            var digit = _e[_d];
-            mainNumbers[digit] = mainNumbers[digit] || 0;
-            mainNumbers[digit]++;
-        }
-        return mainNumbers;
-    };
-    numerology.prototype.analyse = function (date) {
-        var month = date.getMonth() + 1;
-        var dayCounted = this.reduceNumber(date.getDate());
-        var yearCounted = this.reduceNumber(date.getFullYear());
-        var mainNumbers = this.getMainNumbers(date);
-        var sum = this.sumMainNumbers(mainNumbers);
-        var sumCounted = this.reduceNumber(sum);
-        var countedNumbers = [];
-        var that = this;
-        return {
-            day: date.getDate(),
-            month: month,
-            year: date.getFullYear(),
-            dayCounted: dayCounted,
-            //monthCounted: monthCounted,
-            yearCounted: yearCounted,
-            sum: sum,
-            sumCounted: sumCounted,
-            mainNumbers: mainNumbers,
-            countedNumbers: function () {
-                var result = [];
-                for (var _i = 0, dayCounted_1 = dayCounted; _i < dayCounted_1.length; _i++) {
-                    var number = dayCounted_1[_i];
-                    for (var _a = 0, _b = that.getDigits(number); _a < _b.length; _a++) {
-                        var digit = _b[_a];
-                        result[digit] = result[digit] || 0;
-                        result[digit]++;
-                    }
-                }
-                for (var _c = 0, yearCounted_1 = yearCounted; _c < yearCounted_1.length; _c++) {
-                    var number = yearCounted_1[_c];
-                    for (var _d = 0, _e = that.getDigits(number); _d < _e.length; _d++) {
-                        var digit = _e[_d];
-                        result[digit] = result[digit] || 0;
-                        result[digit]++;
-                    }
-                }
-                for (var _f = 0, _g = that.getDigits(sum); _f < _g.length; _f++) {
-                    var digit = _g[_f];
-                    result[digit] = result[digit] || 0;
-                    result[digit]++;
-                }
-                for (var _h = 0, sumCounted_1 = sumCounted; _h < sumCounted_1.length; _h++) {
-                    var number = sumCounted_1[_h];
-                    for (var _j = 0, _k = that.getDigits(number); _j < _k.length; _j++) {
-                        var digit = _k[_j];
-                        result[digit] = result[digit] || 0;
-                        result[digit]++;
-                    }
-                }
-                return result;
-            },
-            isKingNumber: function () {
-                var digits = that.getDigits(sum);
-                return digits.length === 2 && digits[0] == digits[1];
-            }
-        };
-    };
-    return numerology;
-}());
-exports.default = new numerology();
+}
+exports.default = MatrixDisplay;
 
 
 /***/ }),

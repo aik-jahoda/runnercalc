@@ -6,7 +6,9 @@
   "scripts": {
     "start": "npm-run-all dev",
     "serve": "./node_modules/.bin/http-server -p 8080",
-    "dev": "webpack-dev-server --progress --colors"
+    "dev": "webpack-dev-server --progress --colors",
+    "build": "npm-run-all webpack",
+    "webpack": "webpack"
   },
   "repository": {
     "type": "git",

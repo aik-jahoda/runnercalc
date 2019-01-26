@@ -29,11 +29,11 @@ export class App extends React.Component<{}, AppState> {
 
     render() {
         return (<div><h1>Numerology</h1>
-            Datum narození <DatePicker onChange={this.dateChanged} selected={this.state.date} />
             Jméno: <input onChange={this.nameChanged} />
+            Datum narození <DatePicker onChange={this.dateChanged} selected={this.state.date} />
+            <DestinyCross name={this.state.name} />
             <DateExpander date={this.state.date} />
             <MatrixDisplay date={this.state.date} />
-            <DestinyCross name={this.state.name} />
         </div>);
     }
 }

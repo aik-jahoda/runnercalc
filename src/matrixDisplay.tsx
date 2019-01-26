@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as moment from 'moment';
-import Numerology from './numerology'
+import Numerology from './engine/numerology'
 
 interface MatrixDisplayProps {
     date: Date

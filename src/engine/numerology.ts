@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import { reduceNumber } from './tools';
 
 class numerology {
 
@@ -10,16 +11,6 @@ class numerology {
             number = Math.floor(number / 10);
         }
         return result;
-    }
-
-    reduceNumber(number: number): number[] {
-        let numberCounted: Array<number> = [];
-        while (number >= 10) {
-            let counted = this.getDigits(number).reduce((prev, current) => prev + current);
-            numberCounted.push(counted);
-            number = counted;
-        }
-        return numberCounted;
     }
 
     sumMainNumbers(mainNumbers: number[]): number {
@@ -48,6 +39,17 @@ class numerology {
         return mainNumbers;
     }
 
+
+    reduceNumber(number: number): number[] {
+        let numberCounted: Array<number> = [];
+        while (number >= 10) {
+            let counted = this.getDigits(number).reduce((prev, current) => prev + current);
+            numberCounted.push(counted);
+            number = counted;
+        }
+        return numberCounted;
+    }
+
     analyse(date: Date) {
         let month = date.getMonth() + 1;
         let dayCounted = this.reduceNumber(date.getDate());
@@ -55,14 +57,12 @@ class numerology {
         let mainNumbers = this.getMainNumbers(date);
         let sum = this.sumMainNumbers(mainNumbers);
         let sumCounted = this.reduceNumber(sum);
-        let countedNumbers: number[] = [];
         let that = this;
         return {
             day: date.getDate(),
             month: month,
             year: date.getFullYear(),
             dayCounted: dayCounted,
-            //monthCounted: monthCounted,
             yearCounted: yearCounted,
             sum: sum,
             sumCounted,

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as moment from 'moment';
-import Numerology from './numerology'
+import Numerology from './engine/numerology'
+import { reduceNumber } from './engine/tools';
 
 interface DisplayProps {
     date: Date
@@ -14,7 +15,7 @@ class Display extends React.Component<DisplayProps, {}> {
         let countedRows: any[] = []
         let maxCounted = Math.max(result.dayCounted.length, result.yearCounted.length);
 
-        let sumCounted = Numerology.reduceNumber(result.sum);
+        let sumCounted = reduceNumber(result.sum);
         for (let i = maxCounted - 1; i >= 0; i--) {
             countedRows.push(
                 <tr>
