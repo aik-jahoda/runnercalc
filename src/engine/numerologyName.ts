@@ -1,14 +1,9 @@
 import { getNumberFromText } from "./alphabet";
 import { reduceNumber } from "./tools";
 
-function getNames(name: string) {
-    return name.split(" ").filter((name) => name.length > 0);
-}
-
 export class NameNumerology {
 
-    static analyse(name: string) {
-        const names = getNames(name);
+    static analyse(names: string[]) {
         const nameNumbers = names.map((name) => ({ ...getNumberFromText(name), name }));
         const destinyNumber = nameNumbers.map(number => number.initialLetterNumber)
             .reduce((previous, current) => previous + current, 0);

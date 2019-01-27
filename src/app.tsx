@@ -5,10 +5,15 @@ import { DestinyCross } from './destinyCross'
 import DateExpander from './dateExpander'
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker, { registerLocale } from 'react-datepicker'
+import { NameSearch } from './nameSearch';
 
 interface AppState {
     date: Date,
     name: string
+}
+
+function sptitName(name: string) {
+    return name.split(" ").filter((name) => name.length > 0);
 }
 
 export class App extends React.Component<{}, AppState> {
@@ -33,9 +38,12 @@ export class App extends React.Component<{}, AppState> {
         return (<div><h1>Numerology</h1>
             <span>Jméno: <input onChange={this.nameChanged} /></span>
             <span>Datum narození <DatePicker onChange={this.dateChanged} selected={this.state.date} showMonthDropdown showYearDropdown minDate={moment().subtract(100, "years").toDate()} maxDate={moment().toDate()} /></span>
-            <DestinyCross name={this.state.name} />
+            <DestinyCross name={sptitName(this.state.name)} />
             <DateExpander date={this.state.date} />
             <MatrixDisplay date={this.state.date} />
+            <NameSearch />
         </div>);
     }
 }
+
+

@@ -8,7 +8,8 @@
     "serve": "./node_modules/.bin/http-server -p 8080",
     "dev": "webpack-dev-server --progress --colors",
     "build": "npm-run-all webpack",
-    "webpack": "webpack"
+    "webpack": "webpack",
+    "find": "npx tsc -t es2017 src/engine/selectName.ts"
   },
   "repository": {
     "type": "git",

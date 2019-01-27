@@ -6,7 +6,7 @@ import { getMessage, MessageType } from './engine/numberExplanation';
 import { getNumberFromText } from './engine/alphabet';
 
 interface DestinyCrossProps {
-        name: string
+        name: string[]
 }
 
 interface DestinyCrossState {
@@ -23,7 +23,7 @@ function createMessage(n: number) {
                         case MessageType.negative: return "red";
                 }
         }
-        return <p style={{ color: messageTypeToColor(message.type) }}>{message.id}: {message.text}</p>
+        return <p key={n} style={{ color: messageTypeToColor(message.type) }}>{message.id}: {message.text}</p>
 }
 
 function numberInCircle(n: number) {
@@ -36,14 +36,15 @@ function nameElemet(name: {
         rawNumber: number;
         initialLetterNumber: number;
 }) {
-
-        return <table>
-                <tr>
-                        <td style={{ textAlign: "center" }}>{name.initialLetterNumber}</td>
-                </tr>
-                <tr>
-                        <td>{name.name}</td>
-                </tr>
+        return <table key={name.rawNumber}>
+                <tbody>
+                        <tr>
+                                <td style={{ textAlign: "center" }}>{name.initialLetterNumber}</td>
+                        </tr>
+                        <tr>
+                                <td>{name.name}</td>
+                        </tr>
+                </tbody>
         </table>
 }
 
@@ -63,30 +64,34 @@ export class DestinyCross extends React.Component<DestinyCrossProps, DestinyCros
                         ].filter((x) => x !== 0))).sort((a, b) => a - b);
                 return (<div>
                         <table style={{ textAlign: "center" }}>
-                                <tr>
-                                        <td >
-                                                <div>{numberInCircle(result.destinyNumber)}</div>
-                                        </td>
-                                </tr>
-                                <tr><td >
-                                        <table>
-                                                <tr>
-                                                        <td rowSpan={2}>{numberInCircle(result.west)}</td>
-                                                        <td style={{
-                                                                display: "flex",
-                                                                borderBottom: "1px solid black"
-                                                        }}>{result.nameNumbers.map((x) => nameElemet(x))}</td>
-                                                        <td rowSpan={2}>{numberInCircle(result.east)}</td>
-                                                </tr>
-                                        </table>
+                                <tbody>
+                                        <tr>
+                                                <td >
+                                                        <div>{numberInCircle(result.destinyNumber)}</div>
+                                                </td>
+                                        </tr>
+                                        <tr><td >
+                                                <table>
+                                                        <tbody>
+                                                                <tr>
+                                                                        <td rowSpan={2}>{numberInCircle(result.west)}</td>
+                                                                        <td style={{
+                                                                                display: "flex",
+                                                                                borderBottom: "1px solid black"
+                                                                        }}>{result.nameNumbers.map((x) => nameElemet(x))}</td>
+                                                                        <td rowSpan={2}>{numberInCircle(result.east)}</td>
+                                                                </tr>
+                                                        </tbody>
+                                                </table>
 
-                                </td></tr>
-                                <tr><td >
-                                        <div>{result.firstCoordinate}</div>
-                                        <div>{result.secondCoordinate}</div>
-                                        <div>{result.thirdCoordinate}</div>
-                                        <div>{numberInCircle(result.south)}</div>
-                                </td></tr>
+                                        </td></tr>
+                                        <tr><td >
+                                                <div>{result.firstCoordinate}</div>
+                                                <div>{result.secondCoordinate}</div>
+                                                <div>{result.thirdCoordinate}</div>
+                                                <div>{numberInCircle(result.south)}</div>
+                                        </td></tr>
+                                </tbody>
                         </table >
 
                         <div>{sentences.map(createMessage)}</div>

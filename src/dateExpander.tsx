@@ -18,7 +18,7 @@ class Display extends React.Component<DisplayProps, {}> {
         let sumCounted = reduceNumber(result.sum);
         for (let i = maxCounted - 1; i >= 0; i--) {
             countedRows.push(
-                <tr>
+                <tr key={i}>
                     <td>{result.dayCounted[i]}</td>
                     <td>{/*result.monthCounted[i]*/}</td>
                     <td>{result.yearCounted[i]}</td>
