@@ -1,10 +1,12 @@
-import { getNumberFromText } from "./alphabet";
-import { reduceNumber } from "./tools";
+import { getNumberFromText, TextDescription } from "./alphabet";
+import { reduceNumber, reducePartial } from "./tools";
+
+export type NameBreakDown = { name: string; } & TextDescription
 
 export class NameNumerology {
 
     static analyse(names: string[]) {
-        const nameNumbers = names.map((name) => ({ ...getNumberFromText(name), name }));
+        const nameNumbers: NameBreakDown[] = names.map((name) => ({ ...getNumberFromText(name), name }));
         const destinyNumber = nameNumbers.map(number => number.initialLetterNumber)
             .reduce((previous, current) => previous + current, 0);
         const firstCoordinate = nameNumbers.map(number => number.rawNumber)
@@ -16,6 +18,10 @@ export class NameNumerology {
         const east = nameNumbers.length > 1 ? nameNumbers[nameNumbers.length - 1].reducedNumber : 0;
         const south = reduceNumber(thirdCoordinate);
 
+        const reducedEatWest = west + east;
+        const reducedNorthSouth = south + destinyNumber;
+        const main = reducedEatWest + reducedNorthSouth;
+
         return {
             nameNumbers,
             destinyNumber,
@@ -24,7 +30,10 @@ export class NameNumerology {
             thirdCoordinate,
             west,
             east,
-            south
+            south,
+            reducedEatWest,
+            reducedNorthSouth,
+            main
         }
     }
 

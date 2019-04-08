@@ -33,22 +33,24 @@ export interface TextDescription {
     reducedNumber: number,
     rawNumber: number,
     initialLetterNumber: number
+    nameNumbers: number[]
 }
 
 export function getNumberFromText(name: string) {
-    if (cache.has(name)) {
-        return cache.get(name);
+    const cahceValue = cache.get(name);
+    if (cahceValue) {
+        return cahceValue;
     }
+    const nameNumbers: number[] = []
 
-    let rawNumber = 0
     for (let ch of name) {
-        rawNumber += getNumberFromAlphabet(ch);
+        nameNumbers.push(getNumberFromAlphabet(ch))
     }
 
     const initialLetterNumber = name.length > 0 ? getNumberFromAlphabet(name[0]) : 0;
-
+    let rawNumber = nameNumbers.reduce((prev, currnet) => prev + currnet, 0)
     const result = {
-        reducedNumber: reduceNumber(rawNumber), rawNumber, initialLetterNumber
+        reducedNumber: reduceNumber(rawNumber), rawNumber, initialLetterNumber, nameNumbers
     }
 
     cache.set(name, result);

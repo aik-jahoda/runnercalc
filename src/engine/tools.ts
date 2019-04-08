@@ -1,4 +1,12 @@
 export function reduceNumber(n: number): number {
+    while (n >= 10) {
+        n = reducePartial(n);
+    }
+
+    return n;
+}
+
+export function reducePartial(n: number): number {
     if (n < 10) {
         return n;
     }
@@ -9,5 +17,5 @@ export function reduceNumber(n: number): number {
         n = Math.floor(n / 10);
     }
 
-    return reduceNumber(result);
+    return result;
 }
